@@ -1,0 +1,114 @@
+## Alternative creation with Conda
+conda create -n maskrcnn20210503 python=3.5
+
+## Removing conda envs
+conda remove --name maskrcnn20210503 --all
+
+## Activating:
+conda activate maskrcnn20210503
+
+## Deactivating
+conda deactivate
+
+## Choosing the gpu card
+CUDA_VISIBLE_DEVICES=
+
+# Warning: We use conda so we can use python 3.5, which supports tensorflow 1.x
+
+## Installing requirements into the Venv
+while read requirement; do conda install --yes $requirement; done < requirements.txt
+
+## Running the code
+python3 doremi_mrcnn.py train --weights=coco &> log
+
+nohup python3 /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/doremi_mrcnn.py train --weights=coco > log.out 2>&1 &
+nohup python3 /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/doremi_mrcnn.py train --weights=coco > log_resnet50.out &
+nohup python3 /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/doremi_mrcnn.py train --weights=/import/c4dm-05/elona/maskrcnn-logs/logs_all_layers_101/doremi20210504T0325/mask_rcnn_doremi_0039.h5 > /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/log_resnet101_20210512.out &
+whitby 235760
+
+
+
+
+
+python3 /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/doremi_mrcnn.py splash --weights=/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/logs/doremi20210504T0325/mask_rcnn_doremi_0029.h5 --image=/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/test-img/accidental-tucking-002.png
+python3 /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/doremi_mrcnn.py splash --weights=/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/logs/doremi20210504T0325/mask_rcnn_doremi_0029.h5 --image=/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/test-img/jpgtucking.jpg
+
+
+python3 /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/doremi_mrcnn.py splash --weights=/import/c4dm-05/elona/maskrcnn-logs/1685_dataset_resnet101_20210901/doremi20210504T0325/mask_rcnn_doremi_0079.h5  --image=/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/test-img/Bartok-Solo-Violin-Sonata-mvt-4-020.png
+
+
+new experiment
+
+01/09/2021
+nohup python3 /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/doremi_mrcnn.py train --weights=/import/c4dm-05/elona/maskrcnn-logs/logs_all_layers_101/doremi20210504T0325/mask_rcnn_doremi_0039.h5 > /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/log_resnet101_20210901.out &
+[1] 29699
+
+
+08/09/2021
+nohup python3 /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/doremi_mrcnn.py train --weights=/import/c4dm-05/elona/maskrcnn-logs/logs_all_layers_101/doremi20210504T0325/mask_rcnn_doremi_0039.h5 > /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/log_resnet101_20210908_diff_anch.out &
+[1] 139822
+
+
+08/09/2021
+resnet_50 
+pre trained weights /import/c4dm-05/elona/maskrcnn-logs/logs_resnet50/logs_resnet50/doremi20210504T1930/mask_rcnn_doremi_0018.h5
+
+nohup python3 /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/doremi_mrcnn_copy.py train --weights=/import/c4dm-05/elona/maskrcnn-logs/logs_resnet50/logs_resnet50/doremi20210504T1930/mask_rcnn_doremi_0018.h5 > /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/log_resnet50_20210908_diff_anch.out &
+weights saved by accident here: /import/c4dm-05/elona/maskrcnn-logs/1685_dataset_resnet101_20210901/doremi20210504T1930/
+
+
+
+
+
+## Evaluating
+python3 /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/doremi_mrcnn.py evaluate --weights=/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/logs/doremi20210504T0325/mask_rcnn_doremi_0029.h5
+python3 /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/doremi_mrcnn.py evaluate --weights=/import/c4dm-05/elona/maskrcnn-logs/logs_resnet50/logs_resnet50/doremi20210504T1930/mask_rcnn_doremi_0017.h5
+python3 /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/doremi_mrcnn.py evaluate --weights=/import/c4dm-05/elona/maskrcnn-logs/logs_all_layers_101/doremi20210504T0325/mask_rcnn_doremi_0039.h5
+python3 /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/doremi_mrcnn.py evaluate --weights=/import/c4dm-05/elona/maskrcnn-logs/1685_dataset_resnet101_20210901/doremi20210504T0325/mask_rcnn_doremi_0079.h5 
+
+
+
+
+# New Logs folder
+python3 doremi_mrcnn.py train --weights=/import/c4dm-05/elona/maskrcnn-logs/logs/doremi20210504T0325/mask_rcnn_doremi_0029.h5
+
+# Train All Layers (2021/05/12)
+nohup python3 doremi_mrcnn.py train --weights=/import/c4dm-05/elona/maskrcnn-logs/logs_all_layers_101/doremi20210504T0325/mask_rcnn_doremi_0039.h5 &> log_resnet101_20210512.out &
+==============
+
+### Details from code:
+- Check if the paths are correct (xmls, images, class mappigns, coco weights)
+- Now we are only using 291 files for training and around 97 for training. Got these by using 10% (train) and 3% (val) of the random chosen files (>2900 randomly chosen).
+- Chose these 10% just to try to train fast the first time. If this works we can use all of the randomly chosen files
+- These files are COPIED into the dataset/train and dataset/folders by a python script
+- The python script that copies these is in /homes/es314/DOREMI_version_2/DOREMI_v5_half/copy-random-files-to-train-val.py
+
+## Other commands
+
+### Checking Tensorflow / Keras version
+python -c 'import tensorflow as tf; print(tf.__version__)'
+python -c 'import keras; print(keras.__version__)'
+
+
+
+ssh with vs code --> cd to MRCNN_DOREMI_20210503 --> type jupyter notebook --> you are in, just click the link from the terminal --> passcode is from 1 to 6
+
+
+tensorboard --logdir=/import/c4dm-05/elona/maskrcnn-logs/ --host localhost --port 8889
+
+
+----------------------------------------------
+NEW experiments
+
+1685 images in the dataset using a resnet 101 architecture, pre-training from coco 
+
+14/04/2022
+
+nohup python3 /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/doremi_mrcnn.py train --weights=coco > /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20220214/log_1685_resnet101_20220214_coco.out &
+
+
+
+
+higher resnet
+nohup python3 /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/doremi_mrcnn_1685_resnet101_highres.py train --weights=coco > /homes/es314/DOREMI_version_2/MRCNN_DOREMI_20220214/log_1685_resnet101_20220219_coco_high_res.out &
+run again 19/04/2022
