@@ -28,6 +28,7 @@ no need to do these if using the parsed files /data/scratch/acw507/DoReMi_v1/Par
 
     python /data/home/acw507/mask-OMR/scripts/create_mappings.py
 
-## Check the stats
+## Create annotations: 
+    python /data/home/acw507/mask-OMR/scripts/create_annotations.py
 
 
