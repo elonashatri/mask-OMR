@@ -11,12 +11,12 @@ import tensorflow as tf
 
 
 ##### FINISH IMPORTS ######
-ANNOTATIONS_PATH = "/homes/es314/DOREMI_version_2/data_v5/parsed_by_classnames_final/*.xml"
-IMGS_PATH = "/homes/es314/DOREMI_version_2/data_v5/images/"
-TF_RECORDS_PATH = "/import/c4dm-05/elona/doremi_v5/train_validation_test_records/"
+ANNOTATIONS_PATH = "/data/scratch/acw507/DoReMi_v1/Parsed_by_page_omr_xml/*.xml"
+IMGS_PATH = "/data/scratch/acw507/DoReMi_v1/Images/"
+TF_RECORDS_PATH = "/data/home/acw507/mask-OMR/data/tfrecords/"
 # Constants:
 # CLASSNAMES_PATH = "/homes/es314/DOREMI/data/data_stats/all_classes.csv"
-CLASSNAMES_PATH = "/import/c4dm-05/elona/doremi_v5/train_validation_test_records/mapping.json"
+CLASSNAMES_PATH = "/data/home/acw507/mask-OMR/data/tfrecords/mapping.json"
 TRAIN_SPLIT = 0.8
 TEST_SPLIT = 0.9
 
@@ -82,18 +82,9 @@ def get_img_annotations(annotations_path, imgs_path):
         # Get image name from XML file name
         page = xmldoc.getElementsByTagName("Page")
         page_index_str = page[0].attributes["pageIndex"].value
-        # Here we add 1 because dorico XML starts pageIndex at 0, but when exporting to image it starts with 1
-        # THERE MIGHT BE SOME EXCEPTIONS
-        # For ex: Au Tombeau de Rachmanimoff exports a page 0 which is EMPTY and needs to be discarded
         page_index_int = int(page_index_str) + 1
-        # Open image related to XML file
-        # Parsed_Winstead - Cygnus, The Swan-layout-0-muscima_Page_3.xml
-        # Winstead - Cygnus, The Swan-001
-        # Also remove "layout-0-muscima_Page_" (22 chars) + len of page_index_str
         ending = 22 + len(str(page_index_int))
-        # If page is 0, we need to add "000"
         leading_zeroes = str(page_index_int).zfill(3)
-        # 7: because we remove the "Parsed_" in the beginning of the filename
         img_filename = filename[7:-ending]+leading_zeroes
         img_path = imgs_path + "/" + img_filename + ".png"
         img = Image.open(img_path)
@@ -116,18 +107,27 @@ def get_img_annotations(annotations_path, imgs_path):
             # Classname
             node_classname = node.getElementsByTagName("ClassName")[0]
             node_classname_str = node_classname.firstChild.data 
-            # Top
-            node_top = node.getElementsByTagName("Top")[0]
-            node_top_int = int(node_top.firstChild.data)
+            # Top we subtract 2 pixels so the bounding box goes up  by 2 pixels to include possible missalignment of objects
+            node_top = node.getElementsByTagName('Top')[0]
+            node_top_int = int(node_top.firstChild.data) - 2
             # Left
-            node_left = node.getElementsByTagName("Left")[0]
-            node_left_int = int(node_left.firstChild.data)
+            node_left = node.getElementsByTagName('Left')[0]
+            node_left_int = int(node_left.firstChild.data) - 1 
             # Width
-            node_width = node.getElementsByTagName("Width")[0]
-            node_width_int = int(node_width.firstChild.data)
-            # Height
-            node_height = node.getElementsByTagName("Height")[0]
-            node_height_int = int(node_height.firstChild.data)
+            node_width = node.getElementsByTagName('Width')[0]
+            node_width_int = int(node_width.firstChild.data) + 2
+            # Height, we add 2 pixels to tolarate for objects that fall out of the bounding boxes
+            node_height = node.getElementsByTagName('Height')[0]
+            node_height_int = int(node_height.firstChild.data) + 2
+
+            if node_classname_str == 'kStaffLine':
+                # Top:
+                node_top = node.getElementsByTagName("Top")[0]
+                node_top_int = int(node_top.firstChild.data) - 5
+                # Height 
+                node_height = node.getElementsByTagName("Height")[0]
+                node_height_int = int(node_height.firstChild.data) + 5
+
 
             if node_width_int == 0:
                 node_width_int = 2

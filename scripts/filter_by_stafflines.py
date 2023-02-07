@@ -10,12 +10,8 @@ print('Beginning...')
 # Classnames for ALL pages in ALL files
 files_staffs_count = {}
 for xmlfiles in glob.glob(open_files):
-    # print('xmlfiles: ', xmlfiles)
     filename = os.path.basename(xmlfiles)
-    # Remove .xml from end of file
     filename = filename[:-4]
-    #print('Parsing file: ', filename)
-    # Parse XML Document
     xmldoc = minidom.parse(xmlfiles)
     root = xmldoc.getElementsByTagName('Pages')
     pages = xmldoc.getElementsByTagName('Page')

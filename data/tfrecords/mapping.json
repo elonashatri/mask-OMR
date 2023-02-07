@@ -1,0 +1,285 @@
+[ {
+        "id": 1,
+        "name": "accidentalDoubleFlat"
+    },
+ {
+        "id": 2,
+        "name": "accidentalDoubleSharp"
+    },
+ {
+        "id": 3,
+        "name": "accidentalFlat"
+    },
+ {
+        "id": 4,
+        "name": "accidentalNatural"
+    },
+ {
+        "id": 5,
+        "name": "accidentalQuarterToneFlatStein"
+    },
+ {
+        "id": 6,
+        "name": "accidentalQuarterToneSharpStein"
+    },
+ {
+        "id": 7,
+        "name": "accidentalSharp"
+    },
+ {
+        "id": 8,
+        "name": "accidentalThreeQuarterTonesSharpStein"
+    },
+ {
+        "id": 9,
+        "name": "articAccentAbove"
+    },
+ {
+        "id": 10,
+        "name": "articAccentBelow"
+    },
+ {
+        "id": 11,
+        "name": "articMarcatoAbove"
+    },
+ {
+        "id": 12,
+        "name": "articMarcatoBelow"
+    },
+ {
+        "id": 13,
+        "name": "articStaccatissimoAbove"
+    },
+ {
+        "id": 14,
+        "name": "articStaccatissimoBelow"
+    },
+ {
+        "id": 15,
+        "name": "articStaccatoAbove"
+    },
+ {
+        "id": 16,
+        "name": "articStaccatoBelow"
+    },
+ {
+        "id": 17,
+        "name": "articTenutoAbove"
+    },
+ {
+        "id": 18,
+        "name": "articTenutoBelow"
+    },
+ {
+        "id": 19,
+        "name": "augmentationDot"
+    },
+ {
+        "id": 20,
+        "name": "barline"
+    },
+ {
+        "id": 21,
+        "name": "beam"
+    },
+ {
+        "id": 22,
+        "name": "cClef"
+    },
+ {
+        "id": 23,
+        "name": "dynamicFF"
+    },
+ {
+        "id": 24,
+        "name": "dynamicFFF"
+    },
+ {
+        "id": 25,
+        "name": "dynamicForte"
+    },
+ {
+        "id": 26,
+        "name": "dynamicFortePiano"
+    },
+ {
+        "id": 27,
+        "name": "dynamicForzando"
+    },
+ {
+        "id": 28,
+        "name": "dynamicMF"
+    },
+ {
+        "id": 29,
+        "name": "dynamicMP"
+    },
+ {
+        "id": 30,
+        "name": "dynamicPP"
+    },
+ {
+        "id": 31,
+        "name": "dynamicPPP"
+    },
+ {
+        "id": 32,
+        "name": "dynamicPiano"
+    },
+ {
+        "id": 33,
+        "name": "dynamicSforzato"
+    },
+ {
+        "id": 34,
+        "name": "dynamicText"
+    },
+ {
+        "id": 35,
+        "name": "fClef"
+    },
+ {
+        "id": 36,
+        "name": "flag16thDown"
+    },
+ {
+        "id": 37,
+        "name": "flag16thUp"
+    },
+ {
+        "id": 38,
+        "name": "flag32ndDown"
+    },
+ {
+        "id": 39,
+        "name": "flag32ndUp"
+    },
+ {
+        "id": 40,
+        "name": "flag8thDown"
+    },
+ {
+        "id": 41,
+        "name": "flag8thUp"
+    },
+ {
+        "id": 42,
+        "name": "gClef"
+    },
+ {
+        "id": 43,
+        "name": "gradualDynamic"
+    },
+ {
+        "id": 44,
+        "name": "kStaffLine"
+    },
+ {
+        "id": 45,
+        "name": "noteheadBlack"
+    },
+ {
+        "id": 46,
+        "name": "noteheadHalf"
+    },
+ {
+        "id": 47,
+        "name": "noteheadWhole"
+    },
+ {
+        "id": 48,
+        "name": "ornamentTrill"
+    },
+ {
+        "id": 49,
+        "name": "rest16th"
+    },
+ {
+        "id": 50,
+        "name": "rest32nd"
+    },
+ {
+        "id": 51,
+        "name": "rest8th"
+    },
+ {
+        "id": 52,
+        "name": "restHalf"
+    },
+ {
+        "id": 53,
+        "name": "restQuarter"
+    },
+ {
+        "id": 54,
+        "name": "restWhole"
+    },
+ {
+        "id": 55,
+        "name": "slur"
+    },
+ {
+        "id": 56,
+        "name": "stem"
+    },
+ {
+        "id": 57,
+        "name": "systemicBarline"
+    },
+ {
+        "id": 58,
+        "name": "tie"
+    },
+ {
+        "id": 59,
+        "name": "timeSig2"
+    },
+ {
+        "id": 60,
+        "name": "timeSig3"
+    },
+ {
+        "id": 61,
+        "name": "timeSig4"
+    },
+ {
+        "id": 62,
+        "name": "timeSig5"
+    },
+ {
+        "id": 63,
+        "name": "timeSig6"
+    },
+ {
+        "id": 64,
+        "name": "timeSig7"
+    },
+ {
+        "id": 65,
+        "name": "timeSig8"
+    },
+ {
+        "id": 66,
+        "name": "timeSig9"
+    },
+ {
+        "id": 67,
+        "name": "timeSigCommon"
+    },
+ {
+        "id": 68,
+        "name": "timeSigCutCommon"
+    },
+ {
+        "id": 69,
+        "name": "timeSignatureComponent"
+    },
+ {
+        "id": 70,
+        "name": "tupletBracket"
+    },
+ {
+        "id": 71,
+        "name": "tupletText"
+    }
+]

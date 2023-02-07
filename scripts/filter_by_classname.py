@@ -33,18 +33,13 @@ list_to_exclude = ['accidentalTripleSharp',
 
 
 for xmlfiles in tqdm(glob.glob(open_files)):
-    # print('xmlfiles: ', xmlfiles)
     filename = os.path.basename(xmlfiles)
-    # Remove .xml from end of file
     filename = filename[:-4]
-    #print('Parsing file: ', filename)
-    # Parse XML Document
     xmldoc = minidom.parse(xmlfiles)
     root = xmldoc.getElementsByTagName('Pages')
     pages = xmldoc.getElementsByTagName('Page')
 
     should_save = True
-    # Classnames for ALL pages in each file
     for page in pages:
         nodes = page.getElementsByTagName('Node')
 

@@ -4,7 +4,7 @@ import os
 import json
 from tqdm import tqdm
 # Get files in directory
-PATH = '/homes/es314/DOREMI_version_2/DOREMI_v3/parsed/'
+PATH = '/data/scratch/acw507/DoReMi_v1/Parsed_XML/'
 open_files = PATH+'*.xml'
 
 for xmlfiles in tqdm(glob.glob(open_files)):

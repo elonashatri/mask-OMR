@@ -2,9 +2,12 @@
 /data/scratch/acw507/DoReMi_v1
 
 # How to prepare the data?
+
+#Start with parsing and prettyfying the xml files and filenames
+    python /data/home/acw507/mask-OMR/scripts/parsing_xml.py
 # Create mapping json from the dataset
 
-
+# 
 
 ## Alternative creation with Conda
 conda create -n maskrcnn20210503 python=3.6

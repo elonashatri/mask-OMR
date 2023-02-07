@@ -7,14 +7,11 @@ from xml.dom import minidom
 import shutil
 import os
 
-# ALWAYS PUT / IN THE END
-XML_DIR = '/homes/es314/DOREMI_version_2/data_v5/parsed_by_classnames/'
+XML_DIR = '/data/scratch/acw507/DoReMi_v1/Parsed_by_page_omr_xml/'
 XML_PATH = XML_DIR + '*.xml'
-# ALWAYS PUT / IN THE END
-IMG_DIR = '/homes/es314/DOREMI_version_2/DOREMI_v3/images/'
+IMG_DIR = '/data/scratch/acw507/DoReMi_v1/Images/'
 IMG_PATH = IMG_DIR + '*.png'
-
-NEW_IMG_DIR = '/homes/es314/DOREMI_version_2/data_v5/images/'
+# NEW_IMG_DIR = '/data/scratch/acw507/DoReMi_v1/new_img_dir/'
 
 
 def main():
@@ -72,14 +69,16 @@ def main():
 
             # xml_without_image.append(xml_file[len_xml_dirname:-4])
             xml_without_image.append(img_filename+'.png')
-        else:
-            # If image is available, copy to new folder
-            print('filename: ', filename)
-            shutil.copy(IMG_DIR+img_filename+'.png',
-                        NEW_IMG_DIR+img_filename+'.png')
+        # else:
+        #     # If image is available, copy to new folder
+        #     print('filename: ', filename)
+        #     # if you wANT 
+        #     # shutil.copy(IMG_DIR+img_filename+'.png',
+        #     #             NEW_IMG_DIR+img_filename+'.png')
 
     print('xml_without_image_count: ', xml_without_image_count)
     xml_without_image.sort()
+    print(xml_without_image)
 
     # Optional if we need to save stats about missing images
     # file = open(STATS_PATH+'xml_without_image.txt', 'w')  # write to file

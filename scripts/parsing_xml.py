@@ -3,7 +3,7 @@ from xml.dom import minidom
 import glob
 import os
 # Get files in directory
-open_files = '/data/scratch/acw507/DoReMi_v1/Parsed_by_page_omr_xml/*.xml'
+open_files = '/data/scratch/acw507/DoReMi_v1/OMR_XML/*.xml'
 
 #xmldoc = minidom.parse('SEP02_300DPI_CLOCKS_MUSCIMA.xml')
 print('Beginning...')
@@ -31,8 +31,8 @@ for xmlfiles in glob.glob(open_files):
         # print('Nodes len ', len(nodes))
     
         for node in nodes:
-            #node_data = node.getElementsByTagName('Data')[0]
-            #node.removeChild(node_data)
+            node_data = node.getElementsByTagName('Data')[0]
+            node.removeChild(node_data)
             node_classname = node.getElementsByTagName('ClassName')[0]
             node_classname_str = node_classname.firstChild.data
             
@@ -45,9 +45,23 @@ for xmlfiles in glob.glob(open_files):
             # Classnames for all files
             all_classnames.add(node_classname_str)
         # page_str = page.toxml()
+        
+        # prettify the xml, to show a better structure
+        # Separate pages into individual XML Files
+        pretty_xml_as_string = page.toprettyxml()
+        parsed_page_file = open('/data/scratch/acw507/DoReMi_v1/Parsed_XML/Parsed_' + filename + '_Page_' + str(page_number) +'.xml', 'w')        
+        parsed_page_file.write(pretty_xml_as_string)
+        parsed_page_file.close()
 
+
+
+    # # Create file with info for ALL pages
+    # allpages_stats_file = open('/homes/es314/DOREMI/data/data_stats/Stats_' + filename + '.xml', 'w')
+    # for classname in pages_classnames:
+    #     allpages_stats_file.write(classname + '\n')
+    # allpages_stats_file.close()
     
-    allfiles_stats_file = open('/data/home/acw507/mask-OMR/data/classnames.csv', 'w+')
-    for classname in all_classnames:
-        allfiles_stats_file.write(classname + '\n')
-    allfiles_stats_file.close()
+    # allfiles_stats_file = open('/homes/es314/DOREMI_version_2/Stats/Stats_All_Pages.xml', 'w')
+    # for classname in all_classnames:
+    #     allfiles_stats_file.write(classname + '\n')
+    # allfiles_stats_file.close()
