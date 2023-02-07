@@ -1,11 +1,19 @@
+# Dataset path in Apocrita
+/data/scratch/acw507/DoReMi_v1
+
+# How to prepare the data?
+# Create mapping json from the dataset
+
+
+
 ## Alternative creation with Conda
-conda create -n maskrcnn20210503 python=3.5
+conda create -n maskrcnn20210503 python=3.6
 
 ## Removing conda envs
 conda remove --name maskrcnn20210503 --all
 
 ## Activating:
-conda activate maskrcnn20210503
+conda activate maskrcnn
 
 ## Deactivating
 conda deactivate

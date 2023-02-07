@@ -3,7 +3,7 @@ from xml.dom import minidom
 import glob
 import os
 # Get files in directory
-open_files = '/homes/es314/DOREMI_version_2/data_v5/parsed_by_classnames_final/*.xml'
+open_files = '/data/scratch/acw507/DoReMi_v1/OMR_XML/*.xml'
 
 #xmldoc = minidom.parse('SEP02_300DPI_CLOCKS_MUSCIMA.xml')
 print('Beginning...')
@@ -14,12 +14,12 @@ for xmlfiles in glob.glob(open_files):
     filename = os.path.basename(xmlfiles)
     # Remove .xml from end of file
     filename = filename[:-4]
-    print('Parsing file: ', filename)
+    # print('Parsing file: ', filename)
     # Parse XML Document
     xmldoc = minidom.parse(xmlfiles)
     root = xmldoc.getElementsByTagName('Pages')
     pages = xmldoc.getElementsByTagName('Page')
-    print('Pages length: ', len(pages))
+    # print('Pages length: ', len(pages))
 
     # Classnames for ALL pages in each file
     pages_classnames = set()
@@ -27,8 +27,8 @@ for xmlfiles in glob.glob(open_files):
         nodes = page.getElementsByTagName('Node')
         # Add 1 here to match format exported by Dorico
         page_number = int(page.attributes['pageIndex'].value) + 1 
-        print('Page_number = ', page_number)
-        print('Nodes len ', len(nodes))
+        # print('Page_number = ', page_number)
+        # print('Nodes len ', len(nodes))
     
         for node in nodes:
             #node_data = node.getElementsByTagName('Data')[0]
@@ -60,7 +60,7 @@ for xmlfiles in glob.glob(open_files):
     # allpages_stats_file.close()
  
     
-    allfiles_stats_file = open('/homes/es314/DOREMI_version_2/data_v5/stats/classnames.xml', 'w')
+    allfiles_stats_file = open('/data/home/acw507/mask-OMR/data/classnames.xml', 'w+')
     for classname in all_classnames:
         allfiles_stats_file.write(classname + '\n')
     allfiles_stats_file.close()
