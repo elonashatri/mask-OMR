@@ -1,1 +1,7 @@
 **/data/tfrecords/*.tfrecords
+instructions.txt
+*.sh.o*
+*nohup*
+/logs/
+/data/xml
+/mrcnn/__pycache*

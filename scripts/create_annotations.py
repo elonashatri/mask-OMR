@@ -7,7 +7,7 @@ from PIL import Image
 import hashlib
 import tensorflow as tf
 
-#this file was last used 0th march 2021, it has the new annotations, lightweight same witht eh ones that worked with the first version of DOREMI
+#this file was last used 5th march 2021, it has the new annotations, lightweight same witht eh ones that worked with the first version of DOREMI
 
 
 ##### FINISH IMPORTS ######
@@ -15,7 +15,6 @@ ANNOTATIONS_PATH = "/data/scratch/acw507/DoReMi_v1/Parsed_by_page_omr_xml/*.xml"
 IMGS_PATH = "/data/scratch/acw507/DoReMi_v1/Images/"
 TF_RECORDS_PATH = "/data/home/acw507/mask-OMR/data/tfrecords/"
 # Constants:
-# CLASSNAMES_PATH = "/homes/es314/DOREMI/data/data_stats/all_classes.csv"
 CLASSNAMES_PATH = "/data/home/acw507/mask-OMR/data/tfrecords/mapping.json"
 TRAIN_SPLIT = 0.8
 TEST_SPLIT = 0.9
@@ -57,14 +56,6 @@ def get_img_annotations(annotations_path, imgs_path):
     total_count = len(xml_files)
     current_iteration = 0
     
-    # ids_classnames = {}
-    # with open(CLASSNAMES_PATH) as classnames:
-    #     for i, classname in enumerate(classnames):
-    #         # Skip first line
-    #         if i == 0:
-    #             continue
-    #         # Remove \n character at end of line
-    #         ids_classnames[classname[:-1]] = i
     ids_classnames = {}
     with open(CLASSNAMES_PATH) as json_file:
         data = json.load(json_file)
@@ -241,7 +232,7 @@ def main():
                            desc="Serializing validation annotations"):
         writer.write(tf_example.SerializeToString())
 
-    writer.close()
+    # writer.close()
 
 if __name__ == "__main__":
     main()

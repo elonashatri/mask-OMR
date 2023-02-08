@@ -21,7 +21,7 @@ from matplotlib.patches import Polygon
 import IPython.display
 
 # Root directory of the project
-ROOT_DIR = os.path.abspath("/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/")
+ROOT_DIR = os.path.abspath("/data/home/acw507/mask-OMR/")
 
 # Import Mask RCNN
 sys.path.append(ROOT_DIR)  # To find local version of the library

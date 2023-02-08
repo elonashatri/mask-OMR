@@ -39,9 +39,6 @@ CLASSNAMES_PATH = "/import/c4dm-05/elona/doremi_v5_half/train_validation_test_re
 
 # Path to XML Train files
 XML_DATA_PATH = '/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/dataset/'
-# XML_TRAIN_PATH = '/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/dataset/train/'
-# Path to XML Val files
-# XML_VAL_PATH = '/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/dataset/val/'
 
 # Path to Images 
 IMG_PATH = '/homes/es314/DOREMI_version_2/DOREMI_v3/images/'
@@ -142,14 +139,6 @@ class DoremiDataset(utils.Dataset):
             page_index_str = page[0].attributes['pageIndex'].value
 
             page_index_int = int(page_index_str) + 1
-            # Open image related to XML file
-            # /homes/es314/DOREMI_version_2/data_v5/parsed_by_classnames/Parsed_accidental tucking-layout-0-muscima_Page_2.xml
-            # Parsed_accidental tucking-layout-0-muscima_Page_2.xml
-            # Remove '-layout-0-muscima_Page_' (23 chars) + len of page_index_str
-
-            # Image name
-            # /homes/es314/DOREMI_version_2/DOREMI_v3/images/accidental tucking-002.png
-            # accidental tucking-002.png
 
             ending = 23 + len(str(page_index_int))
 

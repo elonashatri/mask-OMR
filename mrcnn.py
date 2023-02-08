@@ -10,10 +10,12 @@ Usage:
     python3 doremi_mrcnn.py train --weights=coco
 
     Outputting to log file
-    python3 doremi_mrcnn.py train --weights=coco &> log
+    python3 doremi_mrcnn.py train --weights='/data/home/acw507/mask-OMR/logs/pre-trained-1685_dataset_resnet101_20210901/mask_rcnn_doremi_0072.h5' &> log
     
     # Resume training a model that you had trained earlier
     python3 doremi_mrcnn.py train --weights=last
+    python3 mrcnn.py train --weights=/data/home/acw507/mask-OMR/logs/pre-trained-1685_dataset_resnet101_20210901/mask_rcnn_doremi_0072.h5 --logs=/data/home/acw507/mask-OMR/logs/logs_001/  &> log
+
 
     # Train a new model starting from ImageNet weights
     python3 doremi_mrcnn.py train --weights=imagenet
@@ -21,10 +23,10 @@ Usage:
     # Apply color splash to an image
     python3 doremi_mrcnn.py splash --weights=/path/to/weights/file.h5 --image=<URL or path to file>
 
-    python3 doremi_mrcnn.py splash --weights=/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/logs/doremi20210504T0325/mask_rcnn_doremi_0029.h5 --image=/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/test-img/accidental-tucking-002.png
+    python3 doremi_mrcnn.py splash --weights=/data/home/acw507/mask-OMR/logs/pre-trained-1685_dataset_resnet101_20210901/mask_rcnn_doremi_0072.h5 --image=/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/test-img/accidental-tucking-002.png
 
     # Evaluate model
-    python3 doremi_mrcnn.py evaluate --weights=/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/logs/doremi20210504T0325/mask_rcnn_doremi_0029.h5 --logs=/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/logs/doremi20210504T0325/
+    python3 doremi_mrcnn.py evaluate --weights=/data/home/acw507/mask-OMR/logs/pre-trained-1685_dataset_resnet101_20210901/mask_rcnn_doremi_0072.h5 --logs=/data/home/acw507/mask-OMR/logs/logs_001/
 
 """
 
@@ -48,24 +50,20 @@ ROOT_DIR = os.path.abspath("./")
 sys.path.append(ROOT_DIR)  # To find local version of the library
 
 # Path to classnames file
-CLASSNAMES_PATH = "/import/c4dm-05/elona/doremi_v5_half/train_validation_test_records/mapping.json"
+CLASSNAMES_PATH = "/data/home/acw507/mask-OMR/data/tfrecords/mapping.json"
 
 # Path to XML Train files
-XML_DATA_PATH = '/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/1685_images_set/'
-# XML_TRAIN_PATH = '/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/dataset/train/'
-# Path to XML Val files
-# XML_VAL_PATH = '/homes/es314/DOREMI_version_2/MRCNN_DOREMI_20210503/dataset/val/'
+XML_DATA_PATH = '/data/home/acw507/mask-OMR/data/xml/'
 
 # Path to Images 
-IMG_PATH = '/homes/es314/DOREMI_version_2/DOREMI_v3/images/'
+IMG_PATH = '/data/scratch/acw507/DoReMi_v1/images/'
 # Path to trained weights file
 # COCO_WEIGHTS_PATH = os.path.join(ROOT_DIR, "weights/mask_rcnn_coco.h5")
-COCO_WEIGHTS_PATH = '/import/c4dm-05/elona/maskrcnn-logs/1685_dataset_resnet101_coco_april_exp/doremi20220414T1249/mask_rcnn_doremi_0029.h5'
+# COCO_WEIGHTS_PATH = '/import/c4dm-05/elona/maskrcnn-logs/1685_dataset_resnet101_coco_april_exp/doremi20220414T1249/mask_rcnn_doremi_0029.h5'
+WEIGHTS_PATH = '/data/home/acw507/mask-OMR/logs/pre-trained-1685_dataset_resnet101_20210901/mask_rcnn_doremi_0072.h5'
 # Directory to save logs and model checkpoints, if not provided
 # through the command line argument --logs
-# DEFAULT_LOGS_DIR = os.path.join(ROOT_DIR, "logs")
-# DEFAULT_LOGS_DIR = '/import/c4dm-05/elona/maskrcnn-logs/logs_all_layers_101/'
-DEFAULT_LOGS_DIR = '/import/c4dm-05/elona/maskrcnn-logs/1685_dataset_resnet101_coco_april_exp/'
+DEFAULT_LOGS_DIR = '/data/home/acw507/mask-OMR/logs/'
 
 ############################################################
 #  Configurations
@@ -139,14 +137,6 @@ class DoremiDataset(utils.Dataset):
             page_index_str = page[0].attributes['pageIndex'].value
 
             page_index_int = int(page_index_str) + 1
-            # Open image related to XML file
-            # /homes/es314/DOREMI_version_2/data_v5/parsed_by_classnames/Parsed_accidental tucking-layout-0-muscima_Page_2.xml
-            # Parsed_accidental tucking-layout-0-muscima_Page_2.xml
-            # Remove '-layout-0-muscima_Page_' (23 chars) + len of page_index_str
-
-            # Image name
-            # /homes/es314/DOREMI_version_2/DOREMI_v3/images/accidental tucking-002.png
-            # accidental tucking-002.png
 
             ending = 23 + len(str(page_index_int))
 
@@ -155,7 +145,6 @@ class DoremiDataset(utils.Dataset):
             leading_zeroes = str(page_index_int).zfill(3)
             img_filename = filename[len(start_str):-ending]+'-'+leading_zeroes
             img_filename = img_filename+'.png'
-            # /homes/es314/DOREMI_version_2/DOREMI_v3/images/beam groups 12 demisemiquavers simple-918.png'
 
             img_path = IMG_PATH + img_filename
             # Hardcoded because our images have the same shape
@@ -180,22 +169,36 @@ class DoremiDataset(utils.Dataset):
             #     "classname": str
             # }
             for node in nodes:
-                this_mask_info = {}
                 # Classname
-                node_classname_el = node.getElementsByTagName('ClassName')[0]
-                node_classname = node_classname_el.firstChild.data
-                # Top
+                node_classname = node.getElementsByTagName("ClassName")[0]
+                node_classname_str = node_classname.firstChild.data 
+                # Top we subtract 2 pixels so the bounding box goes up  by 2 pixels to include possible missalignment of objects
                 node_top = node.getElementsByTagName('Top')[0]
-                node_top_int = int(node_top.firstChild.data)
+                node_top_int = int(node_top.firstChild.data) - 2
                 # Left
                 node_left = node.getElementsByTagName('Left')[0]
-                node_left_int = int(node_left.firstChild.data)
+                node_left_int = int(node_left.firstChild.data) - 1 
                 # Width
                 node_width = node.getElementsByTagName('Width')[0]
-                node_width_int = int(node_width.firstChild.data)
-                # Height
+                node_width_int = int(node_width.firstChild.data) + 2
+                # Height, we add 2 pixels to tolarate for objects that fall out of the bounding boxes
                 node_height = node.getElementsByTagName('Height')[0]
-                node_height_int = int(node_height.firstChild.data)
+                node_height_int = int(node_height.firstChild.data) + 2
+
+                if node_classname_str == 'kStaffLine':
+                    # Top:
+                    node_top = node.getElementsByTagName("Top")[0]
+                    node_top_int = int(node_top.firstChild.data) - 5
+                    # Height 
+                    node_height = node.getElementsByTagName("Height")[0]
+                    node_height_int = int(node_height.firstChild.data) + 5
+                
+                if node_width_int == 0:
+                    node_width_int = 2
+                    node_left_int -= 1
+                if node_height_int == 0:
+                    node_height_int = 2
+                    node_top_int -= 1
 
                 node_mask = str(node.getElementsByTagName('Mask')[0].firstChild.data)
                 # 0: 2 1: 7 0: 9 1: 3
@@ -470,8 +473,8 @@ if __name__ == '__main__':
             mode="inference", config=config, model_dir=args.logs)
 
     # Select weights file to load
-    if args.weights.lower() == "coco":
-        weights_path = COCO_WEIGHTS_PATH
+    if args.weights.lower() == "doremi":
+        weights_path = WEIGHTS_PATH
         # Download weights file
         if not os.path.exists(weights_path):
             utils.download_trained_weights(weights_path)
@@ -486,7 +489,7 @@ if __name__ == '__main__':
 
     # Load weights
     print("Loading weights ", weights_path)
-    if args.weights.lower() == "coco":
+    if args.weights.lower() == "doremi":
         # Exclude the last layers because they require a matching
         # number of classes
         model.load_weights(weights_path, by_name=True, exclude=[

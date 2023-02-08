@@ -5,6 +5,7 @@
 
 #Start with parsing and prettyfying the xml files and filenames
     python /data/home/acw507/mask-OMR/scripts/parsing_xml.py
+    
 # Create mapping json from the dataset
 
 # 
