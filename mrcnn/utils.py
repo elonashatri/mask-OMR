@@ -199,8 +199,8 @@ def box_refinement_graph(box, gt_box):
 
     dy = (gt_center_y - center_y) / height
     dx = (gt_center_x - center_x) / width
-    dh = tf.log(gt_height / height)
-    dw = tf.log(gt_width / width)
+    dh = tf.math.log(gt_height / height)
+    dw = tf.math.log(gt_width / width)
 
     result = tf.stack([dy, dx, dh, dw], axis=1)
     return result
@@ -653,7 +653,6 @@ def trim_zeros(x):
     return x[~np.all(x == 0, axis=1)]
 
 
-
 def compute_matches(gt_boxes, gt_class_ids, gt_masks,
                     pred_boxes, pred_class_ids, pred_scores, pred_masks,
                     iou_threshold=0.5, score_threshold=0.0):
@@ -752,9 +751,6 @@ def compute_ap(gt_boxes, gt_class_ids, gt_masks,
     return mAP, precisions, recalls, overlaps
 
 
-
-
-
 def compute_ap_range(gt_box, gt_class_id, gt_mask,
                      pred_box, pred_class_id, pred_score, pred_mask,
                      iou_thresholds=None, verbose=1):
@@ -795,11 +791,6 @@ def compute_recall(pred_boxes, gt_boxes, iou):
 
     recall = len(set(matched_gt_boxes)) / gt_boxes.shape[0]
     return recall, positive_ids
-
-
-
-
-
 
 
 # ## Batch Slicing

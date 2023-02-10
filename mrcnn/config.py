@@ -1,6 +1,7 @@
 """
 Mask R-CNN
 Base Configurations class.
+
 Copyright (c) 2017 Matterport, Inc.
 Licensed under the MIT License (see LICENSE for details)
 Written by Waleed Abdulla
@@ -100,7 +101,7 @@ class Config(object):
     # If enabled, resizes instance masks to a smaller size to reduce
     # memory load. Recommended when using high-resolution images.
     USE_MINI_MASK = True
-    MINI_MASK_SHAPE = (6, 56)  # (height, width) of the mini-mask
+    MINI_MASK_SHAPE = (56, 56)  # (height, width) of the mini-mask
 
     # Input image resizing
     # Generally, use the "square" resizing mode for training and predicting
@@ -157,18 +158,18 @@ class Config(object):
     MASK_SHAPE = [28, 28]
 
     # Maximum number of ground truth instances to use in one image
-    MAX_GT_INSTANCES = 200
+    MAX_GT_INSTANCES = 100
 
     # Bounding box refinement standard deviation for RPN and final detections.
     RPN_BBOX_STD_DEV = np.array([0.1, 0.1, 0.2, 0.2])
     BBOX_STD_DEV = np.array([0.1, 0.1, 0.2, 0.2])
 
     # Max number of final detections
-    DETECTION_MAX_INSTANCES = 200
+    DETECTION_MAX_INSTANCES = 100
 
     # Minimum probability value to accept a detected instance
     # ROIs below this threshold are skipped
-    DETECTION_MIN_CONFIDENCE = 0.6
+    DETECTION_MIN_CONFIDENCE = 0.7
 
     # Non-maximum suppression threshold for detection
     DETECTION_NMS_THRESHOLD = 0.3
@@ -177,7 +178,7 @@ class Config(object):
     # The Mask RCNN paper uses lr=0.02, but on TensorFlow it causes
     # weights to explode. Likely due to differences in optimizer
     # implementation.
-    LEARNING_RATE = 0.0003
+    LEARNING_RATE = 0.001
     LEARNING_MOMENTUM = 0.9
 
     # Weight decay regularization

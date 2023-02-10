@@ -21,7 +21,7 @@ from matplotlib.patches import Polygon
 import IPython.display
 
 # Root directory of the project
-ROOT_DIR = os.path.abspath("/data/home/acw507/mask-OMR/")
+ROOT_DIR = os.path.abspath("../")
 
 # Import Mask RCNN
 sys.path.append(ROOT_DIR)  # To find local version of the library
@@ -33,7 +33,7 @@ from mrcnn import utils
 ############################################################
 
 def display_images(images, titles=None, cols=4, cmap=None, norm=None,
-                   interpolation=None, image_name=""):
+                   interpolation=None):
     """Display the given set of images, optionally with titles.
     images: list or array of image tensors in HWC format.
     titles: optional. A list of titles to display with each image.
@@ -54,7 +54,6 @@ def display_images(images, titles=None, cols=4, cmap=None, norm=None,
                    norm=norm, interpolation=interpolation)
         i += 1
     plt.show()
-    plt.savefig('Figure_'+ image_name +'.png')
 
 
 def random_colors(N, bright=True):
@@ -83,9 +82,11 @@ def apply_mask(image, mask, color, alpha=0.5):
 
 def display_instances(image, boxes, masks, class_ids, class_names,
                       scores=None, title="",
-                      figsize=(21, 30), ax=None,
-                      show_mask=True, show_bbox=True,
-                      colors=None, captions=None):
+                      figsize=(16, 16), ax=None,
+                      show_mask=True, show_mask_polygon=True, show_bbox=True, 
+                      colors=None, captions=None, show_caption=True, save_fig_path=None,
+                      filter_classes=None, min_score=None):
+
     """
     boxes: [num_instance, (y1, x1, y2, x2, class_id)] in image coordinates.
     masks: [height, width, num_instances]
@@ -94,10 +95,16 @@ def display_instances(image, boxes, masks, class_ids, class_names,
     scores: (optional) confidence scores for each box
     title: (optional) Figure title
     show_mask, show_bbox: To show masks and bounding boxes or not
+    show_mask_polygon (Ahmed Gad): Show the mask polygon or not
     figsize: (optional) the size of the image
     colors: (optional) An array or colors to use with each object
     captions: (optional) A list of strings to use as captions for each object
+    show_caption (Ahmed Gad): Whether to show the caption or not
+    save_fig_path (Ahmed Gad): Path to save the figure
+    filter_classes: A list of the class IDs to show in the result. Any object with a class ID not included in this list will not be considered.
+    min_score (Ahmed Gad): The minimum score of the objects to display.
     """
+
     # Number of instances
     N = boxes.shape[0]
     if not N:
@@ -123,6 +130,20 @@ def display_instances(image, boxes, masks, class_ids, class_names,
 
     masked_image = image.astype(np.uint32).copy()
     for i in range(N):
+        if filter_classes is None:
+            pass
+        elif class_ids[i] in filter_classes:
+            pass
+        else:
+            continue
+        
+        if min_score is None:
+            pass
+        elif scores is None:
+            pass
+        elif scores[i] < min_score:
+            continue
+
         color = colors[i]
 
         # Bounding box
@@ -132,20 +153,21 @@ def display_instances(image, boxes, masks, class_ids, class_names,
         y1, x1, y2, x2 = boxes[i]
         if show_bbox:
             p = patches.Rectangle((x1, y1), x2 - x1, y2 - y1, linewidth=2,
-                                alpha=0.7, linestyle="dashed",
+                                alpha=0.7, #linestyle="dashed",
                                 edgecolor=color, facecolor='none')
             ax.add_patch(p)
 
-        # Label
-        if not captions:
-            class_id = class_ids[i]
-            score = scores[i] if scores is not None else None
-            label = class_names[class_id]
-            caption = "{} {:.3f}".format(label, score) if score else label
-        else:
-            caption = captions[i]
-        ax.text(x1, y1 + 8, caption,
-                color='b', size=11, backgroundcolor="none")
+        if show_caption:
+            # Label
+            if not captions:
+                class_id = class_ids[i]
+                score = scores[i] if scores is not None else None
+                label = class_names[class_id]
+                caption = "{} {:.3f}".format(label, score) if score else label
+            else:
+                caption = captions[i]
+            ax.text(x1, y1 + 8, caption,
+                    color='w', size=11, backgroundcolor="none")
 
         # Mask
         mask = masks[:, :, i]
@@ -153,22 +175,22 @@ def display_instances(image, boxes, masks, class_ids, class_names,
             masked_image = apply_mask(masked_image, mask, color)
 
         # Mask Polygon
-        # Pad to ensure proper polygons for masks that touch image edges.
-        padded_mask = np.zeros(
-            (mask.shape[0] + 2, mask.shape[1] + 2), dtype=np.uint8)
-        padded_mask[1:-1, 1:-1] = mask
-        contours = find_contours(padded_mask, 0.5)
-        for verts in contours:
-            # Subtract the padding and flip (y, x) to (x, y)
-            verts = np.fliplr(verts) - 1
-            p = Polygon(verts, facecolor="none", edgecolor=color)
-            ax.add_patch(p)
+        if show_mask_polygon:
+            # Pad to ensure proper polygons for masks that touch image edges.
+            padded_mask = np.zeros(
+                (mask.shape[0] + 2, mask.shape[1] + 2), dtype=np.uint8)
+            padded_mask[1:-1, 1:-1] = mask
+            contours = find_contours(padded_mask, 0.5)
+            for verts in contours:
+                # Subtract the padding and flip (y, x) to (x, y)
+                verts = np.fliplr(verts) - 1
+                p = Polygon(verts, facecolor="none", edgecolor=color)
+                ax.add_patch(p)
     ax.imshow(masked_image.astype(np.uint8))
-    plt.savefig('your_desired_path_to_image.png')
+    if not (save_fig_path is None):
+        plt.savefig(save_fig_path, bbox_inches="tight")
     if auto_show:
         plt.show()
-        plt.savefig('output-test.jpg',bbox_inches='tight', pad_inches=-0.5,orientation= 'landscape')
-
 
 def display_differences(image,
                         gt_box, gt_class_id, gt_mask,
@@ -340,8 +362,8 @@ def plot_overlaps(gt_class_ids, pred_class_ids, pred_scores,
                 for i, id in enumerate(pred_class_ids)])
     plt.xticks(np.arange(len(gt_class_ids)),
                [class_names[int(id)] for id in gt_class_ids], rotation=90)
-    thresh =1
-    #thresh = overlaps.max() / 2.
+
+    thresh = overlaps.max() / 2.
     for i, j in itertools.product(range(overlaps.shape[0]),
                                   range(overlaps.shape[1])):
         text = ""
@@ -361,7 +383,7 @@ def plot_overlaps(gt_class_ids, pred_class_ids, pred_scores,
 
 def draw_boxes(image, boxes=None, refined_boxes=None,
                masks=None, captions=None, visibilities=None,
-               title="", figsize=(21, 30), ax=None, image_name=""):
+               title="", ax=None):
     """Draw bounding boxes and segmentation masks with different
     customizations.
 
@@ -439,7 +461,7 @@ def draw_boxes(image, boxes=None, refined_boxes=None,
             if refined_boxes is not None:
                 y1, x1, y2, x2 = ry1, rx1, ry2, rx2
             ax.text(x1, y1, caption, size=11, verticalalignment='top',
-                    color='b', backgroundcolor="none", 
+                    color='w', backgroundcolor="none",
                     bbox={'facecolor': color, 'alpha': 0.5,
                           'pad': 2, 'edgecolor': 'none'})
 
@@ -459,7 +481,6 @@ def draw_boxes(image, boxes=None, refined_boxes=None,
                 p = Polygon(verts, facecolor="none", edgecolor=color)
                 ax.add_patch(p)
     ax.imshow(masked_image.astype(np.uint8))
-    plt.savefig('Figure_'+ image_name +'.png')
 
 
 def display_table(table):
@@ -502,4 +523,3 @@ def display_weight_stats(model):
                 "{:+9.4f}".format(w.std()),
             ])
     display_table(table)
-
